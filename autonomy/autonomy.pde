@@ -65,18 +65,14 @@ void mousePressed() {
 
 class Cell {
   float x, y;
-  boolean state;
-  boolean nextState;
+  int state;
+  int nextState;
   Cell[] neighbours;
   
   Cell(float ex, float why) {
     x = ex * _cellSize;
     y = why * _cellSize;
-    if (random(2) > 1) {
-      nextState = true;
-    } else {
-      nextState = false;
-    }
+    nextState = int(random(2));
     state = nextState;
     neighbours = new Cell[0];
   }
@@ -86,29 +82,32 @@ class Cell {
   }
   
   void calcNextState() {
-    int liveCount = 0;
-    if (state) { liveCount++; }
-    for(int i = 0; i < neighbours.length; i++) {
-      if (neighbours[i].state == true) {
-        liveCount++;
+    if (state == 0) {
+      int firingCount = 0;
+      for(int i = 0; i < neighbours.length; i++) {
+        if (neighbours[i].state == 1) {
+          firingCount++;
+        }
       }
-    }
-    
-    if (liveCount <= 4) {
-      nextState = false;
-    } else if (liveCount > 4) {
-      nextState = true;
-    }
-    if ((liveCount == 4) || (liveCount == 5)) {
-      nextState = !nextState;
+      if (firingCount == 2) {
+        nextState = 1;
+      } else {
+        nextState = state;
+      }
+    } else if (state == 1) {
+      nextState = 2;
+    } else if (state == 2) {
+      nextState = 0;
     }
   }
   
   void drawMe() {
     state = nextState;
     stroke(0);
-    if (state == true) {
+    if (state == 1) {
       fill(0);
+    } else if (state == 2) {
+      fill(150);
     } else {
       fill(255);
     }
