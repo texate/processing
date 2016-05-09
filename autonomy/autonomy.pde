@@ -3,7 +3,7 @@ int _cellSize = 10;
 int _numX, _numY;
 
 void setup() {
-  size(500,300);
+  size(800,400);
   _numX = floor(width/_cellSize);
   _numY = floor(height/_cellSize);
   restart();
@@ -87,24 +87,20 @@ class Cell {
   
   void calcNextState() {
     int liveCount = 0;
+    if (state) { liveCount++; }
     for(int i = 0; i < neighbours.length; i++) {
       if (neighbours[i].state == true) {
         liveCount++;
       }
     }
     
-    if (state == true) {
-      if ((liveCount == 2) || (liveCount == 3)) {
-        nextState = true;
-      } else {
-        nextState = false;
-      }
-    } else {
-      if (liveCount == 3) {
-        nextState = true;
-      } else {
-        nextState = false;
-      }
+    if (liveCount <= 4) {
+      nextState = false;
+    } else if (liveCount > 4) {
+      nextState = true;
+    }
+    if ((liveCount == 4) || (liveCount == 5)) {
+      nextState = !nextState;
     }
   }
   
